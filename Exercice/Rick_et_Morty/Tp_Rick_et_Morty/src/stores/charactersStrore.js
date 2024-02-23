@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import filterCategories from '@/mockdata/filterCategories.json';
 import { ref } from 'vue';
+import axios from 'axios';
 
 export const useStoreCharacters = defineStore('storeCharacters',()=>{
     const requestFilter = ref({ page : 1})
@@ -28,15 +29,22 @@ export const useStoreCharacters = defineStore('storeCharacters',()=>{
 
         try{
             const response = await axios.get(url);
-            console.log(response)
             if(response){
-                
+                charactersCount.value = response.data.info.count || response.data.length;
+                charactersItems.value = response.data.results || response.data;
+                lastPage.value = response.data.info.pages || 0;
+            }else{
+                throw new Error('Failed to get characters');
             }
         }catch(error){
-
+            console.error("error getting characters",error);
+            charactersItems.value = []
+            charactersCount.value = 0;
+            lastPage.value = 1;
         }
+        charactersLoading.value = false;
 
     }
 
-    return{filterCategoriesData,charactersCount,charactersItems,lastPage,getCharacters,buildUrl}
+    return{filterCategoriesData,charactersCount,charactersItems,lastPage,charactersLoading,getCharacters,buildUrl}
 })
