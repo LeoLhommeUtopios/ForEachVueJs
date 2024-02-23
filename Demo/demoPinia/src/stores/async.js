@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
+
 import axios from 'axios';
 
 export const useAsyncStore = defineStore('asyncStore',()=>{
@@ -29,6 +30,8 @@ export const useAsyncStore = defineStore('asyncStore',()=>{
     function localStorageSet (){
         const user = {username : "username", password:"Pa$$word"};
         localStorage.setItem('user', JSON.stringify(user));
+
+
     }
 
     function localStorageGet (){
